@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://mhdxr.me
+
+# Sitemaps
+Sitemap: https://mhdxr.me/sitemap.xml
