@@ -10,7 +10,6 @@ import {
   FiBookOpen as LearnIcon,
   FiCoffee as ProjectIcon,
   FiCpu as DashboardIcon,
-  FiPieChart as AnalyticsIcon,
   FiPocket as HomeIcon,
   FiRss as BlogIcon,
   FiUser as ProfileIcon,
@@ -112,7 +111,7 @@ export const MENU_APPS: MenuItemProps[] = [
 export const SOCIAL_MEDIA: MenuItemProps[] = [
   {
     title: 'Email',
-    href: 'mailto:aulianza.dev@gmail.com',
+    href: 'mailto:contact@mhdxr.me',
     icon: <EmailIcon size={iconSize} />,
     isShow: true,
     isExternal: true,
@@ -123,7 +122,7 @@ export const SOCIAL_MEDIA: MenuItemProps[] = [
 
   {
     title: 'Linkedin',
-    href: 'https://www.linkedin.com/in/aulianza/',
+    href: 'https://www.linkedin.com/in/mhdxr/',
     icon: <LinkedinIcon size={iconSize} />,
     isShow: true,
     isExternal: true,
@@ -133,7 +132,7 @@ export const SOCIAL_MEDIA: MenuItemProps[] = [
   },
   {
     title: 'Twitter',
-    href: 'https://twitter.com/aulianzaa',
+    href: 'https://twitter.com/mhdxr',
     icon: <TwitterIcon size={iconSize} />,
     isShow: true,
     isExternal: true,
@@ -143,7 +142,7 @@ export const SOCIAL_MEDIA: MenuItemProps[] = [
   },
   {
     title: 'Instagram',
-    href: 'https://instagram.com/aulianza',
+    href: 'https://instagram.com/mhdxr',
     icon: <InstagramIcon size={iconSize} />,
     isShow: true,
     isExternal: true,
@@ -153,7 +152,7 @@ export const SOCIAL_MEDIA: MenuItemProps[] = [
   },
   {
     title: 'Github',
-    href: 'https://github.com/aulianza',
+    href: 'https://github.com/mhdxr',
     icon: <GithubIcon size={iconSize} />,
     isShow: true,
     isExternal: true,
@@ -164,13 +163,5 @@ export const SOCIAL_MEDIA: MenuItemProps[] = [
 ];
 
 export const EXTERNAL_LINKS: MenuItemProps[] = [
-  {
-    title: 'Analytics',
-    href: 'https://analytics.aulianza.com/share/LK5kiRuosw9pORLa/aulianza.id',
-    icon: <AnalyticsIcon size={iconSize} />,
-    isShow: true,
-    isExternal: true,
-    eventName: 'External Link: Analytics',
-    type: 'Link',
-  },
+  // Analytics link removed - configure with your own analytics if needed
 ];

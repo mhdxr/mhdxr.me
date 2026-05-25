@@ -6,7 +6,7 @@ const BookACall = () => {
     <div className='space-y-5 pb-2'>
       <h3 className='text-lg font-medium'>Book a Call</h3>
       <Link
-        href='https://cal.com/aulianza/schedule'
+        href='https://cal.com/mhdxr/schedule'
         target='_blank'
         data-aos-duration='1000'
         className='flex cursor-pointer flex-col space-y-5 rounded-2xl border bg-white bg-gradient-to-tr px-6 py-5 transition-all duration-300 hover:scale-[101%] hover:shadow-sm dark:border-teal-500 dark:from-teal-950 dark:to-teal-800 dark:text-white'

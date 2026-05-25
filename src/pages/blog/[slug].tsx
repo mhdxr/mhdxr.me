@@ -25,7 +25,7 @@ const BlogDetailPage: NextPage<BlogDetailPageProps> = ({ blog }) => {
   const blogData = blog?.data || {};
 
   const slug = `blog/${blogData?.slug}?id=${blogData?.id}`;
-  const canonicalUrl = `https://aulianza.id/${slug}`;
+  const canonicalUrl = `https://mhdxr.me/${slug}`;
   const description = formatExcerpt(blogData?.excerpt?.rendered);
 
   const incrementViews = async () => {
@@ -58,7 +58,7 @@ const BlogDetailPage: NextPage<BlogDetailPageProps> = ({ blog }) => {
               url: blogData?.featured_image_url,
             },
           ],
-          siteName: 'aulianza blog',
+          siteName: 'mhdxr.me',
         }}
       />
       <Container data-aos='fade-up'>

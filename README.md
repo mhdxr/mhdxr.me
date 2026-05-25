@@ -1,17 +1,34 @@
 <div align="center">
   <h1>mhdxr.me</h1>
-  <p>🔥 Personal website was built originally from scratch using Next.js, TypeScript, Tailwind CSS, SWR, Firebase and Prisma with PostgreSQL</p>
+  <p>🔥 Personal website built with Next.js, TypeScript, Tailwind CSS, SWR, Firebase and Prisma with PostgreSQL</p>
 
-[![GitHub Repo stars](https://img.shields.io/github/stars/mhdxr/mhdxr.me)](https://github.com/aulianza/aulianza.id/stargazers)
-[![Depfu](https://badges.depfu.com/badges/02483ebb21fdb2182a66a28b68d1b7b0/status.svg)](https://depfu.com)
-[![Depfu](https://badges.depfu.com/badges/02483ebb21fdb2182a66a28b68d1b7b0/overview.svg)](https://depfu.com/github/aulianza/aulianza.id?project_id=38809)
-[![Depfu](https://badges.depfu.com/badges/02483ebb21fdb2182a66a28b68d1b7b0/count.svg)](https://depfu.com/github/aulianza/aulianza.id?project_id=38809)
-[![Last Update](https://img.shields.io/badge/deps%20update-every%20sunday-blue.svg)](https://shields.io/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/mhdxr/mhdxr.me)](https://github.com/mhdxr/mhdxr.me/stargazers)
+[![License](https://img.shields.io/github/license/mhdxr/mhdxr.me)](https://github.com/mhdxr/mhdxr.me/blob/main/LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15.3.2-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-blue)](https://www.typescriptlang.org/)
 
 </div>
 <br />
 
-<img width="1359" alt="image" src="https://github.com/aulianza/aulianza.id/assets/15605885/e9665038-6e84-4c8e-a847-fb90138c0303">
+## 📖 About
+
+A modern, feature-rich personal website built with Next.js 15, featuring real-time integrations and a beautiful, responsive design. This project showcases:
+
+- 🎨 **Beautiful UI** - Tailwind CSS with Framer Motion animations
+- 📝 **Blog Integration** - WordPress CMS and DEV.to articles
+- 💬 **Real-time Guestbook** - Powered by Firebase
+- 🎧 **Spotify Widget** - Live "Now Playing" status
+- 📊 **Coding Statistics** - WakaTime integration
+- 🤖 **AI Features** - ChatGPT integration (optional)
+- 💻 **JavaScript Playground** - Live code editor with instant preview
+- 🗂️ **Projects Showcase** - PostgreSQL database with Prisma ORM
+- 🔐 **Authentication** - Next-Auth with Google & GitHub OAuth
+
+Perfect for developers who want a professional portfolio with integrated blog and real-time features.
+
+## 🌐 Live Demo
+
+Visit the live site: **[mhdxr.me](https://mhdxr.me)**
 
 ## Introduction
 
@@ -30,7 +47,7 @@ If you have any questions, suggestions, or anything else, don't hesitate to reac
 
 This website is built using these technologies:
 
-- ◼️ Next.js 13.5.6
+- ◼️ Next.js 15.3.2
 - ⚛️ React 18
 - 🔰 TypeScript
 - 💠 Tailwind CSS 3
@@ -82,49 +99,42 @@ The content on this blog is meticulously managed and sourced from a self-hosted 
 The data projects on this blog are taken from the PostgreSQL database connected through the Prisma Client. The database for this application is hosted on Supabase DB.The data fetching method used to retrieve data projects is Incremental Static Regeneration (ISR) with 1 second revalidation and Server-Side Rendering (SSR) for the project details..
 <br /><br />
 
-## Performance
+<br />
 
-- ### PageSpeed Insights
+## 📋 Prerequisites
 
-Report URL: https://pagespeed.web.dev/analysis/https-aulianza-id/pk0y6xcz25?form_factor=desktop
+Before you begin, ensure you have the following installed:
 
-![image](https://github.com/aulianza/aulianza.id/assets/15605885/d87a6083-caf3-4b84-ba59-975c07193a9f)
+- **Node.js** 18.x or higher
+- **Yarn** 1.22.x or higher (recommended for husky hooks)
+- **PostgreSQL** database (or [Supabase](https://supabase.com) account)
+- **Firebase** project for real-time features ([Get started](https://console.firebase.google.com))
 
-- ### GTmetrix
+### Optional API Keys
 
-Report URL: [https://pagespeed.web.dev/analysis/https-aulianza-id/pk0y6xcz25?form_factor=desktop](https://gtmetrix.com/reports/aulianza.id/REEiduoo/)
-
-![image](https://github.com/aulianza/aulianza.id/assets/15605885/953dc131-bf52-4ef6-913c-f6eb8fb6c6a7)
-<br /><br />
+For full functionality, you'll need API keys for:
+- **Spotify API** - For "Now Playing" widget ([Get credentials](https://developer.spotify.com/dashboard))
+- **WakaTime API** - For coding statistics ([Get API key](https://wakatime.com/settings/api-key))
+- **GitHub API** - For repository data ([Generate token](https://github.com/settings/tokens))
+- **OpenAI API** - For ChatGPT feature ([Get API key](https://platform.openai.com/api-keys))
+- **DEV.to API** - For blog integration ([Get API key](https://dev.to/settings/extensions))
 
 ## Getting Started
 
 If you are interested in running this project on your local machine, you can do so in just 3 easy steps below. Additionally, remember to update the ".env.example" file to ".env" and replace the variables with your own in the ".env" file.
 
-### 1. Clone this template using one of the three ways:
+### 1. Clone this repository
 
-1. Clone using git
+Clone using git:
 
-   ```bash
-   git clone https://github.com/aulianza/aulianza.id
-   ```
+```bash
+git clone https://github.com/mhdxr/mhdxr.me.git
+cd mhdxr.me
+```
 
-2. Using `create-next-app`
+Or deploy directly to Vercel:
 
-   ```bash
-   npx create-next-app -e https://github.com/aulianza/aulianza.id project-name
-   ```
-
-3. Using `degit`
-
-   ```bash
-   npx degit aulianza/aulianza.id YOUR_APP_NAME
-   ```
-
-4. Deploy to Vercel or Netlify, etc
-
-   [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/aulianza/aulianza.id)
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/aulianza/aulianza.id)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mhdxr/mhdxr.me)
 
 ### 2. Install dependencies
 
@@ -138,38 +148,40 @@ yarn install
 
 This repository uses several environment variables. Please copy .env.example into .env, then fill in the values with your own. For third-party environment variables such as Spotify, Wakatime, Firebase, and others, please refer to the official documentation provided by each provider.
 
-```
+```env
+# Site Configuration
 BUNDLE_ANALYZER=false
-SITE_URL=https://aulianza.id
+SITE_URL=https://mhdxr.me
 
-# Blog
+# Blog API
 BLOG_API_URL=
 
-# OpenAI
+# OpenAI (for ChatGPT feature)
 OPENAI_API_KEY=
 
-# DEV.to
+# DEV.to Integration
 DEVTO_KEY=
 
-# Spotify
+# Spotify Integration
 SPOTIFY_CLIENT_ID=
 SPOTIFY_CLIENT_SECRET=
 SPOTIFY_REFRESH_TOKEN=
 
-# WakaTime
+# WakaTime Integration
 WAKATIME_API_KEY=
 
-# GitHub
+# GitHub Integration
 GITHUB_READ_USER_TOKEN_PERSONAL=
 GITHUB_READ_USER_TOKEN_WORK=
 
-# Prisma Database
+# Prisma Database (PostgreSQL)
 DATABASE_URL='postgres://USER:PASSWORD@HOST:5432/postgres'
+DIRECT_URL='postgres://USER:PASSWORD@HOST:5432/postgres'
 
 # Contact Form
 CONTACT_FORM_API_KEY=
 
-# Firebase
+# Firebase Configuration
 NEXT_PUBLIC_FIREBASE_API_KEY=
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
 NEXT_PUBLIC_FIREBASE_DB_URL=
@@ -184,6 +196,8 @@ NEXT_PUBLIC_FIREBASE_CHAT_DB=
 NEXTAUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+GITHUB_ID=
+GITHUB_SECRET=
 ```
 
 ### 4. Run the development server
@@ -197,6 +211,192 @@ yarn dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. You can start editing the page by modifying `src/pages/index.tsx`.
 <br /><br />
 
+## 📁 Project Structure
+
+```
+mhdxr.me/
+├── prisma/              # Database schema and migrations
+│   ├── schema.prisma    # Prisma schema definition
+│   └── migrations/      # Database migration files
+├── public/              # Static assets (images, fonts, etc.)
+├── src/
+│   ├── common/          # Shared components, hooks, and utilities
+│   │   ├── components/  # Reusable UI components
+│   │   ├── constant/    # Constants and configurations
+│   │   ├── context/     # React context providers
+│   │   ├── hooks/       # Custom React hooks
+│   │   ├── libs/        # Utility libraries (Prisma, Firebase, MDX)
+│   │   ├── stores/      # Zustand state management
+│   │   ├── styles/      # Global styles and fonts
+│   │   └── types/       # TypeScript type definitions
+│   ├── contents/        # MDX content for learning section
+│   ├── modules/         # Feature-specific modules
+│   │   ├── about/       # About page components
+│   │   ├── blog/        # Blog components
+│   │   ├── chat/        # Guestbook/chat components
+│   │   ├── dashboard/   # Dashboard widgets
+│   │   ├── home/        # Homepage components
+│   │   ├── learn/       # Learning section components
+│   │   ├── playground/  # JavaScript playground
+│   │   └── projects/    # Projects showcase
+│   ├── pages/           # Next.js pages (Pages Router)
+│   │   ├── api/         # API routes
+│   │   ├── blog/        # Blog pages
+│   │   ├── learn/       # Learning pages
+│   │   ├── projects/    # Project pages
+│   │   └── ...          # Other pages
+│   └── services/        # External API integrations
+│       ├── blog.ts      # WordPress API
+│       ├── chatgpt.ts   # OpenAI API
+│       ├── devto.ts     # DEV.to API
+│       ├── firebase.ts  # Firebase config
+│       ├── github.ts    # GitHub API
+│       ├── spotify.ts   # Spotify API
+│       └── wakatime.ts  # WakaTime API
+├── .env.example         # Environment variables template
+├── .eslintrc.js         # ESLint configuration
+├── .prettierrc.json     # Prettier configuration
+├── next.config.js       # Next.js configuration
+├── tailwind.config.js   # Tailwind CSS configuration
+├── tsconfig.json        # TypeScript configuration
+└── package.json         # Dependencies and scripts
+```
+
+## 📜 Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `yarn dev` | Start development server at http://localhost:3000 |
+| `yarn build` | Build for production |
+| `yarn start` | Start production server |
+| `yarn lint` | Run ESLint to check code quality |
+| `yarn lint:fix` | Fix ESLint errors and format code with Prettier |
+| `yarn typecheck` | Run TypeScript type checking |
+| `yarn format` | Format code with Prettier |
+| `yarn format:check` | Check code formatting |
+| `yarn test` | Run Jest tests |
+| `yarn test:watch` | Run tests in watch mode |
+| `yarn test:ci` | Run tests in CI mode |
+
+## 🚀 Deployment
+
+### Deploy to Vercel (Recommended)
+
+The easiest way to deploy this Next.js app is to use the [Vercel Platform](https://vercel.com).
+
+#### Step-by-Step Deployment:
+
+1. **Push your code to GitHub**
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+
+2. **Import to Vercel**
+   - Go to [vercel.com/new](https://vercel.com/new)
+   - Import your GitHub repository
+   - Vercel will automatically detect Next.js
+
+3. **Configure Environment Variables**
+   
+   In Vercel dashboard, go to **Settings → Environment Variables** and add all variables from `.env.example`:
+   
+   **Required:**
+   - `DATABASE_URL` - PostgreSQL connection string
+   - `DIRECT_URL` - Direct PostgreSQL connection (for migrations)
+   - `NEXTAUTH_URL` - Your production URL (e.g., https://yourdomain.com)
+   - All Firebase variables (`NEXT_PUBLIC_FIREBASE_*`)
+   
+   **Optional (for full features):**
+   - Spotify, WakaTime, GitHub, OpenAI, DEV.to API keys
+
+4. **Deploy**
+   - Click "Deploy"
+   - Wait for build to complete
+   - Your site will be live!
+
+5. **Run Database Migrations**
+   ```bash
+   # After first deployment
+   npx prisma migrate deploy
+   ```
+
+6. **Configure Custom Domain** (Optional)
+   - Go to **Settings → Domains**
+   - Add your custom domain
+   - Update DNS records as instructed
+   - Update `NEXTAUTH_URL` environment variable
+
+### Post-Deployment Checklist
+
+- [ ] All environment variables configured
+- [ ] Database migrations completed
+- [ ] OAuth providers configured (Google, GitHub)
+- [ ] Firebase security rules set
+- [ ] Test all API integrations
+- [ ] Verify authentication flows
+- [ ] Check mobile responsiveness
+- [ ] Test in different browsers
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**Build fails with Prisma error**
+```bash
+# Generate Prisma client
+npx prisma generate
+```
+
+**Firebase authentication not working**
+- Verify all Firebase environment variables are set correctly
+- Check Firebase console for authorized domains
+- Ensure Firebase project is in production mode (not test mode)
+
+**Spotify "Now Playing" not showing**
+- Verify Spotify API credentials are correct
+- Check if refresh token is still valid
+- Ensure you're currently playing music on Spotify
+- Check Spotify API rate limits
+
+**Database connection fails**
+- Verify `DATABASE_URL` format is correct
+- Check if database is accessible from your deployment
+- For Vercel: ensure `DIRECT_URL` is set for connection pooling
+- Check database firewall rules
+
+**OAuth authentication fails**
+- Verify callback URLs are configured in OAuth provider settings
+- Check `NEXTAUTH_URL` matches your deployment URL
+- Ensure OAuth credentials are correct
+
+### Getting Help
+
+- 📖 [Next.js Documentation](https://nextjs.org/docs)
+- 🔥 [Firebase Documentation](https://firebase.google.com/docs)
+- 🗂️ [Prisma Documentation](https://www.prisma.io/docs)
+- 💬 [Open an issue](https://github.com/mhdxr/mhdxr.me/issues)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Code Style
+
+- Follow the existing code style
+- Run `yarn lint` before committing
+- Run `yarn typecheck` to ensure type safety
+- Write meaningful commit messages (follow [Conventional Commits](https://www.conventionalcommits.org/))
+
 ## License
 
-Licensed under the [GPL-3.0 license](https://github.com/aulianza/aulianza.id/blob/master/LICENSE).
+Licensed under the [GPL-3.0 license](https://github.com/mhdxr/mhdxr.me/blob/main/LICENSE).

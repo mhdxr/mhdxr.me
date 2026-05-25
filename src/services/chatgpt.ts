@@ -1,16 +1,25 @@
 import axios from 'axios';
 
-const OPENAI_URL = 'https://api.openai.com/v1/completions';
+const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 export const postChatPrompt = async (prompt: string) => {
   const response = await axios.post(
     OPENAI_URL,
     {
-      model: 'text-davinci-003',
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful assistant. Answer briefly and concisely.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
       max_tokens: 1000,
-      temperature: 0,
-      prompt: prompt + '. answer briefly',
+      temperature: 0.7,
     },
     {
       headers: {
