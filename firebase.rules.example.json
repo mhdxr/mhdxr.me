@@ -1,0 +1,47 @@
+{
+  "_comment": [
+    "Example Firebase Realtime Database security rules for the guestbook.",
+    "Copy this into the Firebase console (Realtime Database → Rules) and",
+    "replace `chat-messages` with the value of NEXT_PUBLIC_FIREBASE_CHAT_DB.",
+    "Replace AUTHOR_EMAIL with the site owner's email used for moderation.",
+    "These rules:",
+    "  - Allow anyone to read messages.",
+    "  - Require Firebase Auth (or a signed-in next-auth-bridged user) to write.",
+    "  - Validate message shape and length on write.",
+    "  - Restrict deletes to the message author or the site owner.",
+    "Note: next-auth does NOT automatically authenticate Firebase. If the site",
+    "currently relies on UI checks alone, plan to bridge next-auth → Firebase",
+    "via a custom token (firebase-admin signInWithCustomToken). Until that is",
+    "in place, treat the database as publicly writable and DO NOT keep PII",
+    "in the chat node beyond what the user voluntarily submits."
+  ],
+  "rules": {
+    "chat-messages": {
+      ".read": true,
+      "$messageId": {
+        ".write": "auth != null && (!data.exists() || data.child('email').val() === auth.token.email || auth.token.email === 'AUTHOR_EMAIL')",
+        ".validate": "newData.hasChildren(['id','name','email','message','created_at']) || !newData.exists()",
+        "id": {
+          ".validate": "newData.isString() && newData.val().length <= 64"
+        },
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 100"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().length <= 320"
+        },
+        "image": {
+          ".validate": "!newData.exists() || (newData.isString() && newData.val().length <= 2048)"
+        },
+        "message": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+        },
+        "created_at": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "is_show": { ".validate": "!newData.exists() || newData.isBoolean()" },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

@@ -1,21 +1,25 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { isFeatureEnabled } from '@/common/libs/env';
 import { postChatPrompt } from '@/services/chatgpt';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  try {
-    const { prompt } = req.body;
+  if (!isFeatureEnabled.openai) {
+    return res.status(503).json({ error: 'Chat feature is not configured' });
+  }
 
-    // Input validation
-    if (!prompt || typeof prompt !== 'string') {
+  try {
+    const { prompt } = (req.body ?? {}) as { prompt?: unknown };
+
+    if (typeof prompt !== 'string' || prompt.trim().length === 0) {
       return res.status(400).json({ error: 'Invalid prompt' });
     }
 
@@ -28,14 +32,16 @@ export default async function handler(
     const response = await postChatPrompt(prompt);
 
     if (response?.status >= 400) {
-      res.status(response?.status).json({ error: response?.message });
-    } else {
-      // Updated to use new chat completions response format
-      const reply = response?.data?.choices[0]?.message?.content;
-      res.status(200).json({ reply });
+      return res
+        .status(Number(response?.status) || 502)
+        .json({ error: response?.message ?? 'Upstream error' });
     }
+
+    const reply = response?.data?.choices?.[0]?.message?.content ?? '';
+    return res.status(200).json({ reply });
   } catch (error) {
-    console.error('Chat API error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    // eslint-disable-next-line no-console
+    console.error('[api/chat] failed', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }

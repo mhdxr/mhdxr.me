@@ -1,42 +1,43 @@
-const canonicalUrl = 'https://mhdxr.me';
-const metaImage = 'https://mhdxr.me/images/og-image.png';
+// Single source of truth for the site URL. Override locally via SITE_URL env.
+const SITE_URL = process.env.SITE_URL || 'https://mhdxr.me';
+const SITE_NAME = 'mhdxr.me';
+const SITE_TITLE = `${SITE_NAME} - Personal Website`;
+
+const canonicalUrl = SITE_URL;
+const metaImage = `${SITE_URL}/images/og-image.png`;
 const metaDescription =
   'Seasoned Software Engineer especially in Frontend side, with a passion for creating pixel-perfect web experiences';
 
 const defaultSEOConfig = {
-  defaultTitle: 'mhdxr.me - Personal Website',
+  defaultTitle: SITE_TITLE,
   description: metaDescription,
   canonical: canonicalUrl,
   openGraph: {
     canonical: canonicalUrl,
-    title: 'mhdxr.me - Personal Website',
+    title: SITE_TITLE,
     description: metaDescription,
     type: 'website',
+    locale: 'en_US',
+    url: canonicalUrl,
     images: [
       {
         url: metaImage,
-        alt: 'mhdxr.me og-image',
-        width: 800,
-        height: 600,
-      },
-      {
-        url: metaImage,
-        alt: 'mhdxr.me og-image',
+        alt: `${SITE_NAME} og-image`,
         width: 1200,
         height: 630,
       },
       {
         url: metaImage,
-        alt: 'mhdxr.me og-image',
+        alt: `${SITE_NAME} og-image`,
         width: 1600,
         height: 900,
       },
     ],
-    site_name: 'mhdxr.me',
+    site_name: SITE_NAME,
   },
   twitter: {
-    handle: '@handle',
-    site: '@site',
+    // No Twitter account is publicly tied to this site; using only cardType
+    // is valid and avoids broken `@handle` placeholders.
     cardType: 'summary_large_image',
   },
 };

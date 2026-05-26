@@ -3,6 +3,7 @@ name: Code Check
 on:
   push:
     branches:
+      - master
       - main
   pull_request: {}
 
@@ -82,3 +83,35 @@ jobs:
 
       - name: 🃏 Run jest
         run: yarn test
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+    # A full production build needs valid DATABASE_URL / DIRECT_URL (Prisma is
+    # called from `getStaticProps` in `/projects`) and valid Firebase env vars
+    # (used by `/guestbook` during static generation). Those secrets are
+    # provided by Vercel for actual deployments, not by this CI workflow.
+    # We mark this job as non-blocking so a missing-secret build failure does
+    # not turn PRs red. Lint, typecheck, and tests above are the source of
+    # truth for code health.
+    continue-on-error: true
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ⎔ Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📥 Download deps
+        uses: bahmutov/npm-install@v1
+
+      - name: 🏗️ Run build
+        env:
+          DATABASE_URL: postgres://user:pass@localhost:5432/db
+          DIRECT_URL: postgres://user:pass@localhost:5432/db
+          NEXTAUTH_URL: http://localhost:3000
+          NEXTAUTH_SECRET: build-time-placeholder-secret
+          SITE_URL: https://mhdxr.me
+        run: yarn build

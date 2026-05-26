@@ -6,45 +6,54 @@ interface ResponseData {
   views: number;
 }
 
+const SLUG_PATTERN = /^[a-zA-Z0-9_\-/.]{1,200}$/;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   const { slug } = req.query;
 
+  if (
+    !slug ||
+    Array.isArray(slug) ||
+    typeof slug !== 'string' ||
+    !SLUG_PATTERN.test(slug)
+  ) {
+    return res.status(400).json({ error: 'Invalid slug' });
+  }
+
   if (req.method === 'GET') {
     try {
       const contentMeta = await prisma.contentmeta.findUnique({
-        where: { slug: slug as string },
+        where: { slug },
         select: { views: true },
       });
 
-      const contentViewsCount = contentMeta?.views ?? 0;
-
-      const response: ResponseData = {
-        views: contentViewsCount,
-      };
-
-      return res.json(response);
+      const response: ResponseData = { views: contentMeta?.views ?? 0 };
+      return res.status(200).json(response);
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('[api/views] GET failed', error);
       return res.status(500).json({ error: 'Failed to fetch content meta' });
     }
-  } else if (req.method === 'POST') {
+  }
+
+  if (req.method === 'POST') {
     try {
       const contentMeta = await prisma.contentmeta.update({
-        where: { slug: slug as string },
-        data: {
-          views: {
-            increment: 1,
-          },
-        },
+        where: { slug },
+        data: { views: { increment: 1 } },
         select: { views: true },
       });
-      return res.json(contentMeta);
+      return res.status(200).json(contentMeta);
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('[api/views] POST failed', error);
       return res.status(500).json({ error: 'Failed to update views count' });
     }
-  } else {
-    return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  res.setHeader('Allow', 'GET, POST');
+  return res.status(405).json({ error: 'Method not allowed' });
 }

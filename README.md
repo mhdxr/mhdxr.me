@@ -3,7 +3,7 @@
   <p>🔥 Personal website built with Next.js, TypeScript, Tailwind CSS, SWR, Firebase and Prisma with PostgreSQL</p>
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/mhdxr/mhdxr.me)](https://github.com/mhdxr/mhdxr.me/stargazers)
-[![License](https://img.shields.io/github/license/mhdxr/mhdxr.me)](https://github.com/mhdxr/mhdxr.me/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/mhdxr/mhdxr.me)](https://github.com/mhdxr/mhdxr.me/blob/master/LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15.3.2-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-blue)](https://www.typescriptlang.org/)
 
@@ -290,7 +290,7 @@ The easiest way to deploy this Next.js app is to use the [Vercel Platform](https
    ```bash
    git add .
    git commit -m "Initial commit"
-   git push origin main
+   git push origin master
    ```
 
 2. **Import to Vercel**
@@ -330,10 +330,10 @@ The easiest way to deploy this Next.js app is to use the [Vercel Platform](https
 
 ### Post-Deployment Checklist
 
-- [ ] All environment variables configured
+- [ ] All environment variables configured (see `.env.example`, including `NEXTAUTH_SECRET`)
 - [ ] Database migrations completed
 - [ ] OAuth providers configured (Google, GitHub)
-- [ ] Firebase security rules set
+- [ ] Firebase security rules set (see `firebase.rules.example.json`)
 - [ ] Test all API integrations
 - [ ] Verify authentication flows
 - [ ] Check mobile responsiveness
@@ -397,6 +397,20 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Run `yarn typecheck` to ensure type safety
 - Write meaningful commit messages (follow [Conventional Commits](https://www.conventionalcommits.org/))
 
+## 🔐 Security Notes
+
+- Required environment variables are documented in `.env.example`. Optional
+  integrations (Spotify, OpenAI, WakaTime, GitHub tokens, DEV.to) are
+  feature-flagged in `src/common/libs/env.ts` — the app degrades gracefully
+  when they are not configured.
+- `NEXTAUTH_SECRET` is **required in production**. Generate it with
+  `openssl rand -base64 32` and set it on Vercel before deploying.
+- Sample Firebase Realtime Database rules for the guestbook live in
+  `firebase.rules.example.json`. UI-only delete checks are not sufficient;
+  enforce permissions on the database side.
+- Security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy,
+  Permissions-Policy) are configured in `next.config.js`.
+
 ## License
 
-Licensed under the [GPL-3.0 license](https://github.com/mhdxr/mhdxr.me/blob/main/LICENSE).
+Licensed under the [GPL-3.0 license](https://github.com/mhdxr/mhdxr.me/blob/master/LICENSE).

@@ -81,11 +81,14 @@ const ChatItem = ({
           <div className='flex items-center gap-3'>
             {(session?.user?.email === email ||
               session?.user?.email === authorEmail) && (
-              <DeleteIcon
-                size={17}
-                className='hidden cursor-pointer text-red-500 group-hover:flex'
+              <button
+                type='button'
+                aria-label='Delete message'
                 onClick={handleDeleteMessage}
-              />
+                className='hidden text-red-500 group-hover:flex'
+              >
+                <DeleteIcon size={17} />
+              </button>
             )}
           </div>
         </div>
