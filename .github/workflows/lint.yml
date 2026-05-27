@@ -87,13 +87,34 @@ jobs:
   build:
     name: 🏗️ Build
     runs-on: ubuntu-latest
-    # A full production build needs valid DATABASE_URL / DIRECT_URL (Prisma is
-    # called from `getStaticProps` in `/projects`) and valid Firebase env vars
-    # (used by `/guestbook` during static generation). Those secrets are
-    # provided by Vercel for actual deployments, not by this CI workflow.
-    # We mark this job as non-blocking so a missing-secret build failure does
-    # not turn PRs red. Lint, typecheck, and tests above are the source of
-    # truth for code health.
+    # The build job is currently non-blocking. Vercel is the source of truth
+    # for deployable builds because it owns the real environment variables.
+    #
+    # To make this job blocking on GitHub Actions:
+    #   1. Add the secrets listed under `env:` below in
+    #      Settings → Secrets and variables → Actions.
+    #      Minimum required:
+    #        - DATABASE_URL
+    #        - DIRECT_URL
+    #        - NEXTAUTH_URL
+    #        - NEXTAUTH_SECRET
+    #        - SITE_URL
+    #        - NEXT_PUBLIC_FIREBASE_API_KEY
+    #        - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    #        - NEXT_PUBLIC_FIREBASE_DB_URL
+    #        - NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    #        - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    #        - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    #        - NEXT_PUBLIC_FIREBASE_APP_ID
+    #        - NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    #        - NEXT_PUBLIC_FIREBASE_CHAT_DB
+    #   2. Remove `continue-on-error: true` below.
+    #
+    # The placeholder DATABASE_URL/DIRECT_URL/NEXTAUTH_* values keep the
+    # build from crashing on env validation when secrets aren't configured,
+    # but Prisma queries run at build time (e.g. `/projects`, `/dashboard`)
+    # will still fail without a real database — that's why the job stays
+    # non-blocking until real secrets are wired up.
     continue-on-error: true
     steps:
       - name: ⬇️ Checkout repo
@@ -109,9 +130,25 @@ jobs:
 
       - name: 🏗️ Run build
         env:
-          DATABASE_URL: postgres://user:pass@localhost:5432/db
-          DIRECT_URL: postgres://user:pass@localhost:5432/db
-          NEXTAUTH_URL: http://localhost:3000
-          NEXTAUTH_SECRET: build-time-placeholder-secret
-          SITE_URL: https://mhdxr.me
+          # Prefer real secrets when available; fall back to inert
+          # placeholders so the build can at least compile and type-check
+          # the way Vercel does. Empty `${{ secrets.* }}` references
+          # evaluate to an empty string, hence the `||` fallback pattern.
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgres://user:pass@localhost:5432/db' }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL || 'postgres://user:pass@localhost:5432/db' }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'http://localhost:3000' }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'build-time-placeholder-secret' }}
+          SITE_URL: ${{ secrets.SITE_URL || 'https://mhdxr.me' }}
+          # Firebase — all NEXT_PUBLIC_* are inlined into the client bundle
+          # at build time. Empty values are tolerated by `isFirebaseConfigured`
+          # so the guestbook simply renders its "not configured" fallback.
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_DB_URL: ${{ secrets.NEXT_PUBLIC_FIREBASE_DB_URL }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
+          NEXT_PUBLIC_FIREBASE_CHAT_DB: ${{ secrets.NEXT_PUBLIC_FIREBASE_CHAT_DB }}
         run: yarn build

@@ -40,10 +40,23 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
+    // TODO(rate-limit): this endpoint is unauthenticated and increments a
+    // counter on every call, so it can be spammed. Add per-IP rate limiting
+    // (e.g. Upstash Redis or Vercel KV with a sliding window) before
+    // promoting view counts to anything load-bearing.
     try {
-      const contentMeta = await prisma.contentmeta.update({
+      // Use upsert so the first hit on a never-seen slug creates the row
+      // instead of failing with P2025 ("Record to update not found"). This
+      // mirrors what `getStaticProps`/blog-detail rendering expects: the
+      // counter starts at 1 the very first time a post is opened.
+      const contentMeta = await prisma.contentmeta.upsert({
         where: { slug },
-        data: { views: { increment: 1 } },
+        update: { views: { increment: 1 } },
+        create: {
+          slug,
+          type: 'blog',
+          views: 1,
+        },
         select: { views: true },
       });
       return res.status(200).json(contentMeta);

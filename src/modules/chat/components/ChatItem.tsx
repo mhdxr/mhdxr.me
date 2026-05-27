@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { FiTrash2 as DeleteIcon } from 'react-icons/fi';
 import { MdAdminPanelSettings as AdminIcon } from 'react-icons/md';
 
+import { env } from '@/common/libs/env';
 import { MessageProps } from '@/common/types/chat';
 
 import ChatTime from './ChatTime';
@@ -23,7 +24,12 @@ const ChatItem = ({
 }: ChatItemProps) => {
   const { data: session } = useSession();
 
-  const authorEmail = 'mhdxr.dev@gmail.com';
+  // Owner/admin email is configurable via NEXT_PUBLIC_OWNER_EMAIL. The env
+  // helper falls back to the historical default so existing deployments keep
+  // working unchanged. This only affects who is *labeled* as Author and who
+  // can delete other users' messages from the UI; permissions in Firebase
+  // Realtime DB rules remain the source of truth.
+  const authorEmail = env.NEXT_PUBLIC_OWNER_EMAIL;
 
   const pattern = /@([^:]+):/g;
   const modifiedMessage = message?.split(pattern).map((part, index) => {

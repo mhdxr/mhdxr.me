@@ -1,0 +1,53 @@
+# Netlify configuration for mhdxr.me
+#
+# This file is intentionally minimal. The official `@netlify/plugin-nextjs`
+# is auto-installed by Netlify when it detects a Next.js project, so we do
+# not pin or version-lock it here. That keeps the local dev experience and
+# Vercel deploys completely unaffected.
+#
+# To deploy:
+#   1. Connect this repo on https://app.netlify.com
+#   2. Set every variable from `.env.example` under
+#      Site settings → Environment variables (Production scope).
+#   3. Trigger a deploy. The plugin handles SSR/API routes/ISR/next-image.
+#
+# Required env vars (must be set in the Netlify UI, not here):
+#   DATABASE_URL, DIRECT_URL
+#   NEXTAUTH_URL (e.g. https://<your-site>.netlify.app),
+#   NEXTAUTH_SECRET
+#   SITE_URL
+#   NEXT_PUBLIC_FIREBASE_API_KEY
+#   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+#   NEXT_PUBLIC_FIREBASE_DB_URL
+#   NEXT_PUBLIC_FIREBASE_PROJECT_ID
+#   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+#   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+#   NEXT_PUBLIC_FIREBASE_APP_ID
+#   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+#   NEXT_PUBLIC_FIREBASE_CHAT_DB
+#
+# Optional:
+#   BLOG_API_URL, DEVTO_KEY, OPENAI_API_KEY,
+#   SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN,
+#   WAKATIME_API_KEY,
+#   GITHUB_READ_USER_TOKEN_PERSONAL, GITHUB_READ_USER_TOKEN_WORK,
+#   CONTACT_FORM_API_KEY,
+#   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
+#   GITHUB_ID, GITHUB_SECRET,
+#   NEXT_PUBLIC_OWNER_EMAIL
+
+[build]
+  command = "yarn build"
+  # Do NOT set `publish = "out"` — this app is not statically exported.
+  # The Next.js runtime (handled by @netlify/plugin-nextjs) serves SSR
+  # pages and API routes from Netlify Functions.
+  publish = ".next"
+
+[build.environment]
+  # Match the Node version used in CI (.github/workflows/lint.yml) and
+  # what Vercel pins via Next.js 15.x runtime requirements.
+  NODE_VERSION = "20"
+  # Netlify defaults to npm. Keep yarn so husky / lockfile parity matches
+  # local development and Vercel.
+  NPM_FLAGS = "--version"
+  YARN_FLAGS = "--frozen-lockfile"

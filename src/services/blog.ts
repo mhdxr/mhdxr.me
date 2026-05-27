@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
+import { env, isFeatureEnabled } from '@/common/libs/env';
 import { BlogItemProps } from '@/common/types/blog';
 
 type BlogParamsProps = {
@@ -15,7 +16,21 @@ interface BlogDetailResponseProps {
   data: any;
 }
 
-const BLOG_URL = process.env.BLOG_API_URL as string;
+const BLOG_URL = env.BLOG_API_URL ?? '';
+
+/**
+ * Empty payload returned when the blog integration is unconfigured. Shaped
+ * to satisfy `extractData`'s consumers so the UI can render an empty state
+ * without optional-chaining every field.
+ */
+const emptyBlogList = {
+  posts: [] as BlogItemProps[],
+  page: 1,
+  per_page: 0,
+  total_pages: 0,
+  total_posts: 0,
+  categories: 0,
+};
 
 const handleAxiosError = (
   error: AxiosError<any>,
@@ -54,6 +69,12 @@ export const getBlogList = async ({
   categories,
   search,
 }: BlogParamsProps): Promise<{ status: number; data: any }> => {
+  // Blog integration is optional. If BLOG_API_URL isn't configured, return a
+  // shaped-but-empty payload so callers can render an empty state instead of
+  // sending a request to `undefinedposts` and bubbling up a network error.
+  if (!isFeatureEnabled.blog) {
+    return { status: 200, data: { ...emptyBlogList, per_page } };
+  }
   try {
     const params = { page, per_page, categories, search };
     const response = await axios.get(`${BLOG_URL}posts`, { params });
@@ -66,6 +87,12 @@ export const getBlogList = async ({
 export const getBlogDetail = async (
   id: number,
 ): Promise<BlogDetailResponseProps> => {
+  // Mirror getBlogList: when blog is unconfigured we return a 404-shaped
+  // response so `getServerSideProps` in /blog/[slug] redirects to /404
+  // gracefully instead of throwing during SSR.
+  if (!isFeatureEnabled.blog) {
+    return { status: 404, data: { message: 'Blog is not configured' } };
+  }
   try {
     const response = await axios.get(`${BLOG_URL}posts/${id}`);
     return { status: response?.status, data: response?.data };

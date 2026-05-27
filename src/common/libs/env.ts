@@ -41,6 +41,13 @@ function requireEnv(key: EnvKey): string {
 }
 
 /**
+ * Default owner email used as a fallback when NEXT_PUBLIC_OWNER_EMAIL is not
+ * set. Kept in sync with the historical hardcoded value to preserve admin
+ * permissions on the guestbook for existing installs.
+ */
+const DEFAULT_OWNER_EMAIL = 'mhdxr.dev@gmail.com';
+
+/**
  * Required envs. These MUST be set for the app to function correctly.
  * Note: NEXTAUTH_SECRET is required in production for next-auth to sign
  * cookies; we tolerate its absence in development to ease local setup.
@@ -81,6 +88,31 @@ export const env = {
   GOOGLE_CLIENT_SECRET: readEnv('GOOGLE_CLIENT_SECRET'),
   GITHUB_ID: readEnv('GITHUB_ID'),
   GITHUB_SECRET: readEnv('GITHUB_SECRET'),
+
+  // Public site config — exposed to the browser. Falls back to the historical
+  // owner email so existing deployments keep working without a config change.
+  NEXT_PUBLIC_OWNER_EMAIL:
+    readEnv('NEXT_PUBLIC_OWNER_EMAIL') ?? DEFAULT_OWNER_EMAIL,
+
+  // Firebase (Realtime Database) — all NEXT_PUBLIC_* so they're inlined into
+  // the client bundle. Treated as optional so the app doesn't crash when the
+  // guestbook is intentionally unconfigured (CI, previews, fresh local
+  // checkouts).
+  NEXT_PUBLIC_FIREBASE_API_KEY: readEnv('NEXT_PUBLIC_FIREBASE_API_KEY'),
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: readEnv('NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'),
+  NEXT_PUBLIC_FIREBASE_DB_URL: readEnv('NEXT_PUBLIC_FIREBASE_DB_URL'),
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID: readEnv('NEXT_PUBLIC_FIREBASE_PROJECT_ID'),
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: readEnv(
+    'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
+  ),
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: readEnv(
+    'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
+  ),
+  NEXT_PUBLIC_FIREBASE_APP_ID: readEnv('NEXT_PUBLIC_FIREBASE_APP_ID'),
+  NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: readEnv(
+    'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID',
+  ),
+  NEXT_PUBLIC_FIREBASE_CHAT_DB: readEnv('NEXT_PUBLIC_FIREBASE_CHAT_DB'),
 };
 
 /**
@@ -104,6 +136,23 @@ export const isFeatureEnabled = {
   contactForm: Boolean(env.CONTACT_FORM_API_KEY),
   googleAuth: Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET),
   githubAuth: Boolean(env.GITHUB_ID && env.GITHUB_SECRET),
+  // Firebase Realtime DB — minimum set required to actually talk to RTDB.
+  // We require apiKey, projectId, and the databaseURL because that's what
+  // `firebase/database` needs to bootstrap. The chat node path is also
+  // required because every guestbook read/write is namespaced under it.
+  firebase: Boolean(
+    env.NEXT_PUBLIC_FIREBASE_API_KEY &&
+      env.NEXT_PUBLIC_FIREBASE_PROJECT_ID &&
+      env.NEXT_PUBLIC_FIREBASE_DB_URL &&
+      env.NEXT_PUBLIC_FIREBASE_CHAT_DB,
+  ),
 };
+
+/**
+ * Convenience alias mirroring the firebase feature flag. Exposed because the
+ * guestbook code reads more naturally as `isFirebaseConfigured` than
+ * `isFeatureEnabled.firebase`.
+ */
+export const isFirebaseConfigured = (): boolean => isFeatureEnabled.firebase;
 
 export type FeatureFlag = keyof typeof isFeatureEnabled;

@@ -1,9 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getDatabase, onValue, ref, remove, set } from 'firebase/database';
+import {
+  type Database,
+  getDatabase,
+  onValue,
+  ref,
+  remove,
+  set,
+} from 'firebase/database';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import { env, isFirebaseConfigured } from '@/common/libs/env';
 import { firebase } from '@/common/libs/firebase';
 import { MessageProps } from '@/common/types/chat';
 
@@ -16,10 +24,20 @@ const Chat = ({ isWidget = false }: { isWidget?: boolean }) => {
 
   const [messages, setMessages] = useState<MessageProps[]>([]);
 
-  const database = getDatabase(firebase);
-  const databaseChat = process.env.NEXT_PUBLIC_FIREBASE_CHAT_DB as string;
+  // `firebase` is `null` when the integration is unconfigured (e.g. CI,
+  // previews, fresh local checkouts). Guard before calling `getDatabase`
+  // so the guestbook fails closed with a friendly message instead of
+  // throwing at module load time.
+  const firebaseReady = isFirebaseConfigured() && firebase !== null;
+
+  const database: Database | null = useMemo(
+    () => (firebase ? getDatabase(firebase) : null),
+    [],
+  );
+  const databaseChat = env.NEXT_PUBLIC_FIREBASE_CHAT_DB ?? '';
 
   const handleSendMessage = (message: string) => {
+    if (!database || !databaseChat) return;
     const messageId = uuidv4();
     const messageRef = ref(database, `${databaseChat}/${messageId}`);
 
@@ -35,6 +53,7 @@ const Chat = ({ isWidget = false }: { isWidget?: boolean }) => {
   };
 
   const handleDeleteMessage = (id: string) => {
+    if (!database || !databaseChat) return;
     const messageRef = ref(database, `${databaseChat}/${id}`);
 
     if (messageRef) {
@@ -43,6 +62,7 @@ const Chat = ({ isWidget = false }: { isWidget?: boolean }) => {
   };
 
   useEffect(() => {
+    if (!database || !databaseChat) return;
     const messagesRef = ref(database, databaseChat);
     onValue(messagesRef, (snapshot) => {
       const messagesData = snapshot.val();
@@ -57,6 +77,17 @@ const Chat = ({ isWidget = false }: { isWidget?: boolean }) => {
       }
     });
   }, [database]);
+
+  if (!firebaseReady) {
+    return (
+      <div
+        role='status'
+        className='rounded-xl border border-neutral-300 bg-neutral-50 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400'
+      >
+        Guestbook is not configured.
+      </div>
+    );
+  }
 
   return (
     <>

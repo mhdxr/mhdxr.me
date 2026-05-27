@@ -1,0 +1,96 @@
+# Render Blueprint for mhdxr.me
+#
+# Render docs: https://render.com/docs/blueprint-spec
+#
+# This deploys the app as a Node Web Service (NOT a Static Site). The repo
+# uses SSR pages, API routes, NextAuth, and Prisma — all of which require a
+# running Node process, so a Static Site plan would not work.
+#
+# Usage:
+#   1. Push this file to your repo.
+#   2. On Render: New → Blueprint → connect this repo.
+#   3. Render reads this file, creates the service, and prompts you to fill
+#      in the env vars listed below (they are marked `sync: false` so values
+#      are entered in the Render dashboard, never committed to git).
+#   4. Run database migrations once after the first deploy:
+#        render exec <service-id> -- npx prisma migrate deploy
+#      (or via the Render Shell tab).
+
+services:
+  - type: web
+    name: mhdxr-me
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    autoDeploy: true
+    # `yarn install` runs `postinstall: prisma generate` automatically, so
+    # we don't need to call `prisma generate` explicitly here.
+    buildCommand: yarn install --frozen-lockfile && yarn build
+    startCommand: yarn start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # ---- Required ----
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: NEXTAUTH_URL
+        sync: false
+      - key: NEXTAUTH_SECRET
+        sync: false
+      - key: SITE_URL
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_DB_URL
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_APP_ID
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+        sync: false
+      - key: NEXT_PUBLIC_FIREBASE_CHAT_DB
+        sync: false
+      # ---- Optional integrations ----
+      # The app degrades gracefully when these are missing
+      # (see src/common/libs/env.ts → isFeatureEnabled).
+      - key: NEXT_PUBLIC_OWNER_EMAIL
+        sync: false
+      - key: BLOG_API_URL
+        sync: false
+      - key: DEVTO_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: SPOTIFY_CLIENT_SECRET
+        sync: false
+      - key: SPOTIFY_REFRESH_TOKEN
+        sync: false
+      - key: WAKATIME_API_KEY
+        sync: false
+      - key: GITHUB_READ_USER_TOKEN_PERSONAL
+        sync: false
+      - key: GITHUB_READ_USER_TOKEN_WORK
+        sync: false
+      - key: CONTACT_FORM_API_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GITHUB_ID
+        sync: false
+      - key: GITHUB_SECRET
+        sync: false
