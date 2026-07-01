@@ -1,42 +1,27 @@
-const canonicalUrl = 'https://aulianza.id';
-const metaImage = 'https://cloud.aulianza.com/public/images/aulianza-id.png';
+const canonicalUrl = 'https://mhdxr.me';
+const metaImage = 'https://mhdxr.me/images/og-image.png'; // siapkan file OG image di /public/images
 const metaDescription =
-  'Seasoned Software Engineer especially in Frontend side, with a passion for creating pixel-perfect web experiences';
+  'Personal website of Yudda Aditiya — sharing projects, writings, and things I learn.'; // ganti sesuai selera
 
 const defaultSEOConfig = {
-  defaultTitle: 'Ryan Aulia - Personal Website',
+  defaultTitle: 'Yudda Aditiya - Personal Website',
   description: metaDescription,
   canonical: canonicalUrl,
   openGraph: {
     canonical: canonicalUrl,
-    title: 'Ryan Aulia - Personal Website',
+    title: 'Yudda Aditiya - Personal Website',
     description: metaDescription,
     type: 'website',
     images: [
-      {
-        url: metaImage,
-        alt: 'aulianza.id og-image',
-        width: 800,
-        height: 600,
-      },
-      {
-        url: metaImage,
-        alt: 'aulianza.id og-image',
-        width: 1200,
-        height: 630,
-      },
-      {
-        url: metaImage,
-        alt: 'aulianza.id og-image',
-        width: 1600,
-        height: 900,
-      },
+      { url: metaImage, alt: 'mhdxr.me og-image', width: 800, height: 600 },
+      { url: metaImage, alt: 'mhdxr.me og-image', width: 1200, height: 630 },
+      { url: metaImage, alt: 'mhdxr.me og-image', width: 1600, height: 900 },
     ],
-    site_name: 'aulianza.id',
+    site_name: 'mhdxr.me',
   },
   twitter: {
-    handle: '@handle',
-    site: '@site',
+    handle: '@mhdxr', // ganti kalau handle X kamu berbeda
+    site: '@mhdxr',
     cardType: 'summary_large_image',
   },
 };
