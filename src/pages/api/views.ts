@@ -6,16 +6,25 @@ interface ResponseData {
   views: number;
 }
 
+const getSlug = (slug: string | string[] | undefined) => {
+  if (typeof slug !== 'string' || !slug.trim()) return null;
+  return slug.trim();
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { slug } = req.query;
+  const slug = getSlug(req.query.slug);
+
+  if (!slug) {
+    return res.status(400).json({ error: 'Slug is required' });
+  }
 
   if (req.method === 'GET') {
     try {
       const contentMeta = await prisma.contentmeta.findUnique({
-        where: { slug: slug as string },
+        where: { slug },
         select: { views: true },
       });
 
@@ -31,9 +40,14 @@ export default async function handler(
     }
   } else if (req.method === 'POST') {
     try {
-      const contentMeta = await prisma.contentmeta.update({
-        where: { slug: slug as string },
-        data: {
+      const contentMeta = await prisma.contentmeta.upsert({
+        where: { slug },
+        create: {
+          slug,
+          type: 'blog',
+          views: 1,
+        },
+        update: {
           views: {
             increment: 1,
           },
