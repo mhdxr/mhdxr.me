@@ -8,6 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> {
+  if (req.method !== 'GET') {
+    res.status(405).json({ status: false, error: 'Method not allowed' });
+    return;
+  }
+
   try {
     res.setHeader(
       'Cache-Control',
@@ -55,6 +60,9 @@ export default async function handler(
 
     res.status(200).json(responses);
   } catch (error) {
-    res.status(200).json({ status: false, error });
+    res.status(500).json({
+      status: false,
+      error: 'Failed to fetch blog posts',
+    });
   }
 }
