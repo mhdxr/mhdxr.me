@@ -41,6 +41,9 @@ export default ProjectsPage;
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await prisma.projects.findMany({
+    where: {
+      is_show: true,
+    },
     orderBy: [
       {
         is_featured: 'desc',
@@ -55,6 +58,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       projects: JSON.parse(JSON.stringify(response)),
     },
-    revalidate: 1,
+    revalidate: 60,
   };
 };

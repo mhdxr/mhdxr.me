@@ -16,7 +16,7 @@ const ProjectsDetailPage: NextPage<ProjectsDetailPageProps> = ({ project }) => {
   const PAGE_TITLE = project?.title;
   const PAGE_DESCRIPTION = project?.description;
 
-  const canonicalUrl = `https://aulianza.id/project/${project?.slug}`;
+  const canonicalUrl = `https://mhdxr.me/projects/${project?.slug}`;
 
   return (
     <>
@@ -37,7 +37,7 @@ const ProjectsDetailPage: NextPage<ProjectsDetailPageProps> = ({ project }) => {
               url: project?.image,
             },
           ],
-          siteName: 'Blog Ryan Aulia',
+          siteName: 'mhdxr.me',
         }}
       />
       <Container data-aos='fade-up'>
@@ -52,18 +52,16 @@ const ProjectsDetailPage: NextPage<ProjectsDetailPageProps> = ({ project }) => {
 export default ProjectsDetailPage;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const response = await prisma.projects.findUnique({
+  const response = await prisma.projects.findFirst({
     where: {
       slug: String(params?.slug),
+      is_show: true,
     },
   });
 
   if (response === null) {
     return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
+      notFound: true,
     };
   }
 
@@ -73,31 +71,3 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   };
 };
-
-// RY: moved from SSG to SSR since data updated frequently from DB
-// export const getStaticProps: GetStaticProps = async ({ params }) => {
-//   const response = await prisma.projects.findUnique({
-//     where: {
-//       slug: String(params?.slug),
-//     },
-//   });
-
-//   return {
-//     props: {
-//       project: JSON.parse(JSON.stringify(response)),
-//     },
-//     revalidate: 10,
-//   };
-// };
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const response = await prisma.projects.findMany();
-//   const paths = response.map((project) => ({
-//     params: { slug: project.slug },
-//   }));
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };

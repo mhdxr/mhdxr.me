@@ -8,6 +8,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<void> {
+  if (req.method !== 'GET') {
+    res.status(405).json({ status: false, error: 'Method not allowed' });
+    return;
+  }
+
   try {
     res.setHeader(
       'Cache-Control',
@@ -23,8 +28,10 @@ export default async function handler(
       search: search ? String(search) : undefined,
     });
 
+    const posts = responseData?.data?.posts ?? [];
+
     const blogItemsWithViews = await Promise.all(
-      responseData?.data?.posts?.map(async (blogItem: BlogItemProps) => {
+      posts.map(async (blogItem: BlogItemProps) => {
         const { slug } = blogItem;
 
         const contentMeta = await prisma.contentmeta.findUnique({
@@ -44,10 +51,10 @@ export default async function handler(
     const responses = {
       status: true,
       data: {
-        total_pages: responseData?.data?.total_pages,
-        total_posts: responseData?.data?.total_posts,
-        page: responseData?.data?.page,
-        per_page: responseData?.data?.per_page,
+        total_pages: responseData?.data?.total_pages ?? 0,
+        total_posts: responseData?.data?.total_posts ?? 0,
+        page: responseData?.data?.page ?? 1,
+        per_page: responseData?.data?.per_page ?? 9,
         posts: blogItemsWithViews,
         categories: responseData?.data?.categories,
       },
@@ -55,6 +62,9 @@ export default async function handler(
 
     res.status(200).json(responses);
   } catch (error) {
-    res.status(200).json({ status: false, error });
+    res.status(500).json({
+      status: false,
+      error: 'Failed to fetch blog posts',
+    });
   }
 }
